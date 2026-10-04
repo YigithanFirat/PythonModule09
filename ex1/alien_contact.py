@@ -76,6 +76,7 @@ def main() -> None:
     print(f"Duration: {alien.duration_minutes} minutes")
     print(f"Witnesses: {alien.witness_count}")
     print(f"Message: '{alien.message_received}'")
+    print()
 
     try:
         AlienContact(
