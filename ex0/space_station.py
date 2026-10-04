@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import Optional
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ValidationError
 
 
 class SpaceStation(BaseModel):
@@ -47,10 +47,10 @@ def main() -> None:
             last_maintenance=datetime(2026, 9, 30, 12, 0, 0),
             is_operational=True
         )
-    except ValueError:
+    except ValidationError as error:
         print("=" * 40)
         print("Excpected validation error")
-        print("Input should be less than or equal to 20")
+        print(error.errors()[0]["msg"].replace("Value error, ", ""))
 
 
 if __name__ == "__main__":
