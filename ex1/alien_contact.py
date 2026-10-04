@@ -89,10 +89,10 @@ def main() -> None:
             witness_count=1,
             is_verified=False
         )
-    except ValidationError:
+    except ValidationError as error:
         print("=" * 40)
         print("Expected validation error:")
-        print("Telepathic contact requires at least 3 witnesses")
+        print(error.errors()[0]["msg"].replace("Value error, ", ""))
 
 
 if __name__ == "__main__":
