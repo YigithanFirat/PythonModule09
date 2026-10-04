@@ -1,7 +1,8 @@
 from datetime import datetime
 from enum import Enum
 from typing import Optional
-from pydantic import BaseModel, Field, model_validator
+
+from pydantic import BaseModel, Field, ValidationError, model_validator
 
 
 class ContactType(str, Enum):
@@ -50,3 +51,48 @@ class AlienContact(BaseModel):
             )
 
         return self
+
+
+def main() -> None:
+    alien = AlienContact(
+        contact_id="AC_2024_001",
+        timestamp=datetime(2026, 10, 4, 14, 0, 0),
+        location="Area 51, Nevada",
+        contact_type=ContactType.RADIO,
+        signal_strength=8.5,
+        duration_minutes=45,
+        witness_count=5,
+        message_received="Greetings from Zeta Reticuli",
+        is_verified=True
+    )
+
+    print("Alien Contact Log Validation")
+    print("=" * 40)
+    print("Valid contact report:")
+    print(f"ID: {alien.contact_id}")
+    print(f"Type: {alien.contact_type.value}")
+    print(f"Location: {alien.location}")
+    print(f"Signal: {alien.signal_strength}/10")
+    print(f"Duration: {alien.duration_minutes} minutes")
+    print(f"Witnesses: {alien.witness_count}")
+    print(f"Message: '{alien.message_received}'")
+
+    try:
+        AlienContact(
+            contact_id="AC_2024_002",
+            timestamp=datetime(2026, 10, 4, 15, 0, 0),
+            location="Nevada Desert",
+            contact_type=ContactType.TELEPATHIC,
+            signal_strength=5.0,
+            duration_minutes=10,
+            witness_count=1,
+            is_verified=False
+        )
+    except ValidationError:
+        print("=" * 40)
+        print("Expected validation error:")
+        print("Telepathic contact requires at least 3 witnesses")
+
+
+if __name__ == "__main__":
+    main()
