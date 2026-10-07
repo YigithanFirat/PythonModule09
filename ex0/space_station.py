@@ -4,6 +4,7 @@ from pydantic import BaseModel, Field, ValidationError
 
 
 class SpaceStation(BaseModel):
+    # Field constraints prevent invalid station telemetry from being stored.
     station_id: str = Field(min_length=3, max_length=10)
     name: str = Field(min_length=1, max_length=50)
     crew_size: int = Field(ge=1, le=20)
@@ -38,6 +39,7 @@ def main() -> None:
         else "Status: Not Operational"
     )
     try:
+        # This deliberately exceeds the crew limit to demonstrate validation.
         SpaceStation(
             station_id="ISS002",
             name="Invalid Station",
