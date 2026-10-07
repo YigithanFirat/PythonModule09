@@ -25,15 +25,16 @@ class AlienContact(BaseModel):
 
     @model_validator(mode="after")
     def validate_contact(self) -> "AlienContact":
+        # Every alien contact record must use the common "AC" identifier.
         if not self.contact_id.startswith("AC"):
             raise ValueError("Contact ID must start with AC")
-
+        # Physical contact is considered valid only after verification.
         if (
             self.contact_type == ContactType.PHYSICAL
             and not self.is_verified
         ):
             raise ValueError("Physical contact reports must be verified")
-
+        # Telepathic reports require multiple witnesses for reliability.
         if (
             self.contact_type == ContactType.TELEPATHIC
             and self.witness_count < 3
@@ -41,7 +42,7 @@ class AlienContact(BaseModel):
             raise ValueError(
                 "Telepathic contact requires at least 3 witnesses"
             )
-
+        # A strong signal without meaningful message content is incomplete.
         message = self.message_received
         if (
             self.signal_strength > 7.0
