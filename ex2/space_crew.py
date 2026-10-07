@@ -33,9 +33,10 @@ class SpaceMission(BaseModel):
 
     @model_validator(mode="after")
     def validate_mission(self) -> "SpaceMission":
+        # Mission identifiers use the "M" prefix for consistent tracking.
         if not self.mission_id.startswith("M"):
             raise ValueError("Mission ID must start with M")
-
+        # Every mission needs an authorized leader before launch.
         if not any(
             member.rank in (Rank.COMMANDER, Rank.CAPTAIN)
             for member in self.crew
@@ -43,7 +44,7 @@ class SpaceMission(BaseModel):
             raise ValueError(
                 "Mission must have at least one Commander or Captain"
             )
-
+        # Long missions require at least half of the crew to be experienced.
         if self.duration_days > 365:
             experienced_count = sum(
                 member.years_experience >= 5
@@ -54,7 +55,7 @@ class SpaceMission(BaseModel):
                 raise ValueError(
                     "Long missions need at least 50% experienced crew"
                 )
-
+        # Inactive members cannot be assigned to an operational mission.
         if any(not member.is_active for member in self.crew):
             raise ValueError("All crew members must be active")
 
