@@ -42,9 +42,10 @@ class AlienContact(BaseModel):
                 "Telepathic contact requires at least 3 witnesses"
             )
 
+        message = self.message_received
         if (
             self.signal_strength > 7.0
-            and not self.message_received
+            and (message is None or not message.strip())
         ):
             raise ValueError(
                 "Strong signals should include received messages"
