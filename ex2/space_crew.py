@@ -120,7 +120,7 @@ def main() -> None:
             f"- {member.name} ({member.rank.value}) "
             f"- {member.specialization}"
         )
-
+    print()
     try:
         invalid_crew = [
             CrewMember(
