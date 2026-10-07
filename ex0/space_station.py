@@ -38,6 +38,7 @@ def main() -> None:
         if station.is_operational
         else "Status: Not Operational"
     )
+    print()
     try:
         # This deliberately exceeds the crew limit to demonstrate validation.
         SpaceStation(
